@@ -4,8 +4,9 @@
   "description": "ascii based text and chart editor",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack",
+    "build:watch": "webpack --config webpack.config.js --watch",
+    "dev": "browser-sync start --server --files '**/*.html, **/*.js, **/*.css' --cwd 'dist'"
   },
   "keywords": [
     "ascii",
