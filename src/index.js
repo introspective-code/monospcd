@@ -1,6 +1,7 @@
 import './styles.css';
 import {
   isTypeable,
+  isDeleteKey,
   getCharGridIndexAtCursor,
   getUpdatedCharGrid
 } from './utils/helpers';
@@ -30,7 +31,8 @@ const handleDocumentKeyDown = event => {
     charGrid = getUpdatedCharGrid({
       charGrid,
       key: event.key,
-      updateIndex: getCharGridIndexAtCursor({ cursor, boundaries })
+      updateIndex: getCharGridIndexAtCursor({ cursor, boundaries }),
+      insert: true
     });
 
     boundaries = {
@@ -39,6 +41,24 @@ const handleDocumentKeyDown = event => {
     }
 
     cursor.x += 1
+
+    renderCharGrid({ charGrid });
+  }
+
+  if (isDeleteKey(event.key)) {
+    charGrid = getUpdatedCharGrid({
+      charGrid,
+      key: event.key,
+      updateIndex: getCharGridIndexAtCursor({ cursor, boundaries }),
+      insert: false
+    });
+
+    boundaries = {
+      x: charGrid.split('\n')[0].length - 1,
+      y: charGrid.split('\n').length - 1
+    }
+
+    cursor.x -= 1
 
     renderCharGrid({ charGrid });
   }
