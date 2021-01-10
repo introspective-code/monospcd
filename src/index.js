@@ -33,6 +33,11 @@ const handleDocumentKeyDown = event => {
       updateIndex: getCharGridIndexAtCursor({ cursor, boundaries })
     });
 
+    boundaries = {
+      x: charGrid.split('\n')[0].length - 1,
+      y: charGrid.split('\n').length - 1
+    }
+
     cursor.x += 1
 
     renderCharGrid({ charGrid });
