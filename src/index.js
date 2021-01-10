@@ -1,62 +1,41 @@
 import './styles.css';
+import {
+  isTypeable,
+  getCharGridIndexAtCursor,
+  getUpdatedCharGrid
+} from './utils/helpers';
+import {
+  renderCharGrid,
+  renderCursor
+} from './services/render';
 
-const exampleCharGrid = 'abc\ndef\nghi';
+let charGrid = 'abc\ndef\nghi';
 
-const cursor = {
+let cursor = {
   x: 0,
   y: 0
 }
 
-const boundaries = {
-  x: exampleCharGrid.split('\n')[0].length - 1,
-  y: exampleCharGrid.split('\n').length - 1
+let boundaries = {
+  x: charGrid.split('\n')[0].length - 1,
+  y: charGrid.split('\n').length - 1
 }
-
-const isTypeable = key => {
-  return '~`1!2@3#4$5%6^7&8*9(0)-_=+qQwWeErRtTyYuUiIoOpP[{]}\|aAsSdDfFgGhHjJkKlL;:\'"zZxXcCvVbBnNmM,<.>/? '.includes(key);
-}
-
-const renderCharGrid = charGrid => {
-  let row = 0;
-  let col = 0;
-
-  const markup = charGrid.split('').map(character => {
-    if (character === '\n') {
-      row++;
-      col = 0;
-      return '<br/>';
-    } else {
-      return `<div class="char" id="char-${col++}-${row}">${character === ' ' ? '&nbsp' : character}</div>`;
-    }
-  }).join('');
-
-  return markup;
-}
-
-const renderCursor = () => {
-  document.querySelectorAll('.char').forEach(char => {
-    char.classList.remove('selected');
-  });
-
-  document.querySelector(`#char-${cursor.x}-${cursor.y}`).classList.add('selected');
-}
-
-const app = `
-  <div id="root">${renderCharGrid(exampleCharGrid)}</div>
-`;
 
 const rootNode = document.createElement('div');
-rootNode.innerHTML = app;
-
+rootNode.innerHTML = `<div id="root"></div>`;
 document.body.appendChild(rootNode);
 
-document.addEventListener('keydown', event => {
-  const newlineLength = 1;
-  const boundaryOffset = 1;
-
+const handleDocumentKeyDown = event => {
   if (isTypeable(event.key)) {
-    // Update char grid and recalculate dom chars
-    // exampleCharGrid[cursor.x + cursor.y * (boundaries.x + newlineLength + boundaryOffset)];
+    charGrid = getUpdatedCharGrid({
+      charGrid,
+      key: event.key,
+      updateIndex: getCharGridIndexAtCursor({ cursor, boundaries })
+    });
+
+    cursor.x += 1
+
+    renderCharGrid({ charGrid });
   }
 
   if (event.key === 'ArrowUp' && cursor.y > 0) {
@@ -72,7 +51,10 @@ document.addEventListener('keydown', event => {
     cursor.x += 1;
   }
 
-  renderCursor();
-});
+  renderCursor({ cursor });
+}
 
-renderCursor();
+document.addEventListener('keydown', handleDocumentKeyDown);
+
+renderCharGrid({ charGrid });
+renderCursor({ cursor });
