@@ -2,11 +2,17 @@
 
 body {
   background-color: #192a56;
+  font-family: 'Roboto Mono', monospace;
+  color: #f5f6fa;
 }
 
-.title {
+.char {
   color: #dcdde1;
-  font-size: 5em;
-  font-weight: 100;
-  font-family: 'Roboto Mono', monospace;
+  font-size: 2em;
+  display: inline-block;
+}
+
+.selected {
+  background-color: #487eb0;
+  color: #f5f6fa;
 }
