@@ -8,8 +8,10 @@ body {
 
 .char {
   color: #dcdde1;
-  font-size: 2em;
+  font-size: 1em;
   display: inline-block;
+  box-sizing: border-box;
+  background-color: #273c75;
 }
 
 .selected {

@@ -1,10 +1,17 @@
 import {
   VALID_TYPED_KEYS,
   NEWLINE_LENGTH,
-  BOUNDARY_OFFSET
+  BOUNDARY_OFFSET,
+  STANDARD_ROW_LENGTH
 } from './constants';
 
-export const isTypeable = key => {
+import {
+  getCursor,
+  getCharGrid,
+  getBoundaries
+} from '../services/globals';
+
+export const isTypeableKey = key => {
   return VALID_TYPED_KEYS.includes(key);
 }
 
@@ -12,13 +19,21 @@ export const isDeleteKey = key => {
   return key === 'Backspace';
 }
 
-export const getCharGridIndexAtCursor = ({ cursor, boundaries }) => {
+export const isArrowKey = key => {
+  return ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key);
+}
+
+export const getCharGridIndexAtCursor = () => {
+  const cursor = getCursor();
+  const boundaries = getBoundaries();
   return cursor.x + cursor.y * (boundaries.x + NEWLINE_LENGTH + BOUNDARY_OFFSET);
 }
 
-const getPaddedRow = ({ charRow, targetRowLength }) => {
+export const getPaddedRow = ({ charRow }) => {
   let output = charRow;
-  const padding = targetRowLength - charRow.length;
+  output = output.trimEnd();
+
+  const padding = STANDARD_ROW_LENGTH - output.length;
 
   for (var i = 0; i < padding; i++) {
     output += ' ';
@@ -27,21 +42,17 @@ const getPaddedRow = ({ charRow, targetRowLength }) => {
   return output;
 }
 
-const getProcessedRows = ({ charRows, targetRowLength }) => {
+export const getProcessedRows = ({ charRows }) => {
   const output = [];
 
   charRows.forEach(charRow => {
-    if (charRow.length < targetRowLength) {
-      output.push(getPaddedRow({ charRow, targetRowLength }));
-    } else {
-      output.push(charRow);
-    }
+    output.push(getPaddedRow({ charRow }));
   });
 
   return output;
 }
 
-const getMaxRowLength = ({ charRows }) => {
+export const getMaxRowLength = ({ charRows }) => {
   let output = 0;
 
   charRows.forEach(charRow => {
@@ -53,30 +64,29 @@ const getMaxRowLength = ({ charRows }) => {
   return output;
 }
 
-export const getUpdatedCharGrid = ({ charGrid, key, updateIndex, insert }) => {
-  let processedRows;
+export const insertInCharGrid = ({ key }) => {
+  const charGrid = getCharGrid();
+  const updateIndex = getCharGridIndexAtCursor();
 
-  if (insert) {
-    const CHAR_REMOVAL_COUNT = 0;
+  const CHAR_REMOVAL_COUNT = 0;
 
-    const charGridBuffer = charGrid.split('');
-    charGridBuffer.splice(updateIndex, CHAR_REMOVAL_COUNT, key);
-    const charRows = charGridBuffer.join('').split('\n');
+  const charGridBuffer = charGrid.split('');
+  charGridBuffer.splice(updateIndex, CHAR_REMOVAL_COUNT, key);
+  const charRows = charGridBuffer.join('').split('\n');
 
-    const targetRowLength = getMaxRowLength({ charRows });
+  return getProcessedRows({ charRows }).join('\n');
+}
 
-    processedRows = getProcessedRows({ charRows, targetRowLength });
-  } else {
-    const CHAR_REMOVAL_COUNT = 1;
+export const removeInCharGrid = ({ key }) => {
+  const charGrid = getCharGrid();
+  const updateIndex = getCharGridIndexAtCursor();
 
-    const charGridBuffer = charGrid.split('');
-    charGridBuffer.splice(updateIndex, CHAR_REMOVAL_COUNT);
-    const charRows = charGridBuffer.join('').split('\n');
+  const CHAR_REMOVAL_COUNT = 1;
+  const indexOffset = 1;
 
-    const targetRowLength = getMaxRowLength({ charRows });
+  const charGridBuffer = charGrid.split('');
+  charGridBuffer.splice(updateIndex - indexOffset, CHAR_REMOVAL_COUNT);
+  const charRows = charGridBuffer.join('').split('\n');
 
-    processedRows = getProcessedRows({ charRows, targetRowLength });
-  }
-
-  return processedRows.join('\n');
+  return getProcessedRows({ charRows }).join('\n');
 }

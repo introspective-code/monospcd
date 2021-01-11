@@ -3,7 +3,20 @@ import {
   getNewlineElement
 } from './dom-elements';
 
-export const renderCharGrid = ({ charGrid }) => {
+import {
+  getCharGrid,
+  getCursor
+} from './globals';
+
+export const renderRoot = () => {
+  const rootNode = document.createElement('div');
+  rootNode.setAttribute("id", "root");
+  document.body.appendChild(rootNode);
+}
+
+export const renderCharGrid = () => {
+  const charGrid = getCharGrid();
+
   let row = 0;
   let col = 0;
 
@@ -20,7 +33,9 @@ export const renderCharGrid = ({ charGrid }) => {
   document.querySelector('#root').innerHTML = markup;
 }
 
-export const renderCursor = ({ cursor }) => {
+export const renderCursor = () => {
+  const cursor = getCursor();
+
   document.querySelectorAll('.char').forEach(char => {
     char.classList.remove('selected');
   });

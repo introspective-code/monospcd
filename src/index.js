@@ -1,85 +1,24 @@
 import './styles.css';
-import {
-  isTypeable,
-  isDeleteKey,
-  getCharGridIndexAtCursor,
-  getUpdatedCharGrid
-} from './utils/helpers';
+
 import {
   renderCharGrid,
-  renderCursor
+  renderCursor,
+  renderRoot
 } from './services/render';
 
-let charGrid = 'abc\ndef\nghi';
+import {
+  handleDocumentKeyDown,
+  handleTypeableKey
+} from './services/event-handlers';
 
-let cursor = {
-  x: 0,
-  y: 0
-}
+import {
+  setCharGrid
+} from './services/globals';
 
-let boundaries = {
-  x: charGrid.split('\n')[0].length - 1,
-  y: charGrid.split('\n').length - 1
-}
-
-const rootNode = document.createElement('div');
-rootNode.innerHTML = `<div id="root"></div>`;
-document.body.appendChild(rootNode);
-
-const handleDocumentKeyDown = event => {
-  if (isTypeable(event.key)) {
-    charGrid = getUpdatedCharGrid({
-      charGrid,
-      key: event.key,
-      updateIndex: getCharGridIndexAtCursor({ cursor, boundaries }),
-      insert: true
-    });
-
-    boundaries = {
-      x: charGrid.split('\n')[0].length - 1,
-      y: charGrid.split('\n').length - 1
-    }
-
-    cursor.x += 1
-
-    renderCharGrid({ charGrid });
-  }
-
-  if (isDeleteKey(event.key)) {
-    charGrid = getUpdatedCharGrid({
-      charGrid,
-      key: event.key,
-      updateIndex: getCharGridIndexAtCursor({ cursor, boundaries }),
-      insert: false
-    });
-
-    boundaries = {
-      x: charGrid.split('\n')[0].length - 1,
-      y: charGrid.split('\n').length - 1
-    }
-
-    cursor.x -= 1
-
-    renderCharGrid({ charGrid });
-  }
-
-  if (event.key === 'ArrowUp' && cursor.y > 0) {
-    cursor.y -= 1;
-  }
-  if (event.key === 'ArrowDown' && cursor.y < boundaries.y) {
-    cursor.y += 1;
-  }
-  if (event.key === 'ArrowLeft' && cursor.x > 0) {
-    cursor.x -= 1;
-  }
-  if (event.key === 'ArrowRight' && cursor.x < boundaries.x) {
-    cursor.x += 1;
-  }
-
-  renderCursor({ cursor });
-}
+renderRoot();
 
 document.addEventListener('keydown', handleDocumentKeyDown);
 
-renderCharGrid({ charGrid });
-renderCursor({ cursor });
+renderCharGrid();
+renderCursor();
+
