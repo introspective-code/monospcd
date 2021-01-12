@@ -1,5 +1,3 @@
-import './styles.css';
-
 import {
   renderCharGrid,
   renderCursor,
@@ -21,4 +19,3 @@ document.addEventListener('keydown', handleDocumentKeyDown);
 
 renderCharGrid();
 renderCursor();
-
