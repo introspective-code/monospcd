@@ -21,15 +21,35 @@ import {
 } from '../utils/helpers';
 
 export const handleTypeableKey = ({ key }) => {
-  const updatedCharGrid = insertInCharGrid({ key });
+  const cursor = getCursor();
+  const boundaries = getBoundaries();
 
-  setCharGrid(updatedCharGrid);
+  if (cursor.x === boundaries.x && cursor.y === boundaries.y) {
 
-  setCursor({
-    x: getCursor().x + 1
-  });
+  } else {
+    let updatedCharGrid;
 
-  renderCharGrid();
+    if (cursor.x === boundaries.x) {
+      updatedCharGrid = insertInCharGrid({ key: 'Enter' });
+
+      setCharGrid(updatedCharGrid);
+
+      setCursor({
+        x: 0,
+        y: cursor.y + 1
+      });
+    }
+
+    updatedCharGrid = insertInCharGrid({ key });
+
+    setCharGrid(updatedCharGrid);
+
+    setCursor({
+      x: getCursor().x + 1
+    });
+
+    renderCharGrid();
+  }
 }
 
 export const handleDeleteKey = ({ key }) => {
@@ -60,16 +80,20 @@ export const handleEnterKey = ({ key }) => {
   const cursor = getCursor();
   const boundaries = getBoundaries();
 
-  const updatedCharGrid = insertInCharGrid({ key });
+  if (cursor.y === boundaries.y) {
 
-  setCharGrid(updatedCharGrid);
+  } else {
+    const updatedCharGrid = insertInCharGrid({ key });
 
-  setCursor({
-    x: 0,
-    y: cursor.y + 1
-  });
+    setCharGrid(updatedCharGrid);
 
-  renderCharGrid();
+    setCursor({
+      x: 0,
+      y: cursor.y + 1
+    });
+
+    renderCharGrid();
+  }
 }
 
 export const handleArrowKey = ({ key }) => {

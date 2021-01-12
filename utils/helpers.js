@@ -2,7 +2,8 @@ import {
   VALID_TYPED_KEYS,
   NEWLINE_LENGTH,
   BOUNDARY_OFFSET,
-  STANDARD_ROW_LENGTH
+  COL_COUNT,
+  ROW_COUNT
 } from './constants';
 
 import {
@@ -37,7 +38,7 @@ export const getPaddedRow = ({ charRow }) => {
   let output = charRow;
   output = output.trimEnd();
 
-  const padding = STANDARD_ROW_LENGTH - output.length;
+  const padding = COL_COUNT - output.length;
 
   for (var i = 0; i < padding; i++) {
     output += ' ';
@@ -47,11 +48,15 @@ export const getPaddedRow = ({ charRow }) => {
 }
 
 export const getProcessedRows = ({ charRows }) => {
-  const output = [];
+  let output = [];
 
   charRows.forEach(charRow => {
     output.push(getPaddedRow({ charRow }));
   });
+
+  while (output.length > ROW_COUNT) {
+    output.pop();
+  }
 
   return output;
 }
@@ -100,4 +105,16 @@ export const removeInCharGrid = ({ key }) => {
   const charRows = charGridBuffer.join('').split('\n');
 
   return getProcessedRows({ charRows }).join('\n');
+}
+
+export const buildGrid = ({ rows, cols }) => {
+  let output = '';
+  for (var i = 0; i < rows; i++) {
+    for (var j = 0; j < cols; j++) {
+      output += ' ';
+    }
+    output += '\n';
+  }
+
+  return output.substring(0, output.length - 1);
 }

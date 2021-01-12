@@ -1,11 +1,22 @@
-let charGrid = ' ';
+import { buildGrid } from '../utils/helpers';
+import {
+  ROW_COUNT,
+  COL_COUNT
+} from '../utils/constants';
+
+let charGrid = buildGrid({
+  cols: COL_COUNT,
+  rows: ROW_COUNT
+});
+
 let cursor = {
   x: 0,
   y: 0
 }
+
 let boundaries = {
-  x: 0,
-  y: 0
+  x: COL_COUNT,
+  y: ROW_COUNT
 }
 
 export const getCharGrid = () => charGrid;
