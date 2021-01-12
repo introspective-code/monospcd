@@ -23,6 +23,10 @@ export const isArrowKey = key => {
   return ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key);
 }
 
+export const isEnterKey = key => {
+  return key === 'Enter';
+}
+
 export const getCharGridIndexAtCursor = () => {
   const cursor = getCursor();
   const boundaries = getBoundaries();
@@ -64,6 +68,13 @@ export const getMaxRowLength = ({ charRows }) => {
   return output;
 }
 
+export const getCharByKey = key => {
+  if (key === 'Enter') {
+    return '\n';
+  }
+  return key;
+}
+
 export const insertInCharGrid = ({ key }) => {
   const charGrid = getCharGrid();
   const updateIndex = getCharGridIndexAtCursor();
@@ -71,7 +82,7 @@ export const insertInCharGrid = ({ key }) => {
   const CHAR_REMOVAL_COUNT = 0;
 
   const charGridBuffer = charGrid.split('');
-  charGridBuffer.splice(updateIndex, CHAR_REMOVAL_COUNT, key);
+  charGridBuffer.splice(updateIndex, CHAR_REMOVAL_COUNT, getCharByKey(key));
   const charRows = charGridBuffer.join('').split('\n');
 
   return getProcessedRows({ charRows }).join('\n');

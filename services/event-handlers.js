@@ -15,6 +15,7 @@ import {
   isTypeableKey,
   isDeleteKey,
   isArrowKey,
+  isEnterKey,
   insertInCharGrid,
   removeInCharGrid
 } from '../utils/helpers';
@@ -55,6 +56,22 @@ export const handleDeleteKey = ({ key }) => {
   }
 }
 
+export const handleEnterKey = ({ key }) => {
+  const cursor = getCursor();
+  const boundaries = getBoundaries();
+
+  const updatedCharGrid = insertInCharGrid({ key });
+
+  setCharGrid(updatedCharGrid);
+
+  setCursor({
+    x: 0,
+    y: cursor.y + 1
+  });
+
+  renderCharGrid();
+}
+
 export const handleArrowKey = ({ key }) => {
   const cursor = getCursor();
   const boundaries = getBoundaries();
@@ -80,6 +97,10 @@ export const handleDocumentKeyDown = event => {
 
   if (isDeleteKey(event.key)) {
     handleDeleteKey(event);
+  }
+
+  if (isEnterKey(event.key)) {
+    handleEnterKey(event);
   }
 
   if (isArrowKey(event.key)) {
