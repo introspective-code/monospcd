@@ -8,6 +8,10 @@ import {
   getCursor
 } from './globals';
 
+import {
+  ZERO
+} from '../utils/constants';
+
 export const renderRoot = () => {
   const rootNode = document.createElement('div');
   rootNode.setAttribute("id", "root");
@@ -17,13 +21,13 @@ export const renderRoot = () => {
 export const renderCharGrid = () => {
   const charGrid = getCharGrid();
 
-  let row = 0;
-  let col = 0;
+  let row = ZERO;
+  let col = ZERO;
 
   const markup = charGrid.split('').map(character => {
     if (character === '\n') {
       row++;
-      col = 0;
+      col = ZERO;
       return getNewlineElement();
     } else {
       return getCharElement({ col: col++, row, character });

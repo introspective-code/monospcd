@@ -1,7 +1,10 @@
 import { buildGrid } from '../utils/helpers';
 import {
   ROW_COUNT,
-  COL_COUNT
+  COL_COUNT,
+  ONE,
+  ZERO,
+  NEWLINE_CHAR
 } from '../utils/constants';
 
 let charGrid = buildGrid({
@@ -10,8 +13,8 @@ let charGrid = buildGrid({
 });
 
 let cursor = {
-  x: 0,
-  y: 0
+  x: ZERO,
+  y: ZERO
 }
 
 let boundaries = {
@@ -44,7 +47,7 @@ export const setBoundaries = input => {
 
 export const updateBoundaries = () => {
   setBoundaries({
-    x: charGrid.split('\n')[0].length - 1,
-    y: charGrid.split('\n').length - 1
+    x: charGrid.split(NEWLINE_CHAR)[ZERO].length - ONE,
+    y: charGrid.split(NEWLINE_CHAR).length - ONE
   });
 }

@@ -3,7 +3,8 @@ import {
   NEWLINE_LENGTH,
   BOUNDARY_OFFSET,
   COL_COUNT,
-  ROW_COUNT
+  ROW_COUNT,
+  CHAR_REMOVAL_COUNT
 } from './constants';
 
 import {
@@ -31,6 +32,7 @@ export const isEnterKey = key => {
 export const getCharGridIndexAtCursor = () => {
   const cursor = getCursor();
   const boundaries = getBoundaries();
+
   return cursor.x + cursor.y * (boundaries.x + NEWLINE_LENGTH + BOUNDARY_OFFSET);
 }
 
@@ -84,8 +86,6 @@ export const insertInCharGrid = ({ key }) => {
   const charGrid = getCharGrid();
   const updateIndex = getCharGridIndexAtCursor();
 
-  const CHAR_REMOVAL_COUNT = 0;
-
   const charGridBuffer = charGrid.split('');
   charGridBuffer.splice(updateIndex, CHAR_REMOVAL_COUNT, getCharByKey(key));
   const charRows = charGridBuffer.join('').split('\n');
@@ -97,7 +97,7 @@ export const removeInCharGrid = ({ key }) => {
   const charGrid = getCharGrid();
   const updateIndex = getCharGridIndexAtCursor();
 
-  const CHAR_REMOVAL_COUNT = 1;
+  CHAR_REMOVAL_COUNT = 1;
   const indexOffset = 1;
 
   const charGridBuffer = charGrid.split('');

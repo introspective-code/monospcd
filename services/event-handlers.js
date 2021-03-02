@@ -20,11 +20,18 @@ import {
   removeInCharGrid
 } from '../utils/helpers';
 
+import {
+  ONE,
+  ZERO
+} from '../utils/constants'
+
 export const handleTypeableKey = ({ key }) => {
   const cursor = getCursor();
   const boundaries = getBoundaries();
+  const isCursorXAtBoundary = cursor.x === boundaries.x;
+  const isCursorYAtBoundary = cursor.y === boundaries.y;
 
-  if (cursor.x === boundaries.x && cursor.y === boundaries.y) {
+  if (isCursorXAtBoundary && isCursorYAtBoundary) {
 
   } else {
     let updatedCharGrid;
@@ -35,8 +42,8 @@ export const handleTypeableKey = ({ key }) => {
       setCharGrid(updatedCharGrid);
 
       setCursor({
-        x: 0,
-        y: cursor.y + 1
+        x: ZERO,
+        y: cursor.y + ONE
       });
     }
 
@@ -45,7 +52,7 @@ export const handleTypeableKey = ({ key }) => {
     setCharGrid(updatedCharGrid);
 
     setCursor({
-      x: getCursor().x + 1
+      x: getCursor().x + ONE
     });
 
     renderCharGrid();
@@ -55,12 +62,14 @@ export const handleTypeableKey = ({ key }) => {
 export const handleDeleteKey = ({ key }) => {
   const cursor = getCursor();
   const boundaries = getBoundaries();
+  const isCursorXZero = cursor.x === ZERO;
+  const isCursorYZero = cursor.y === ZERO;
 
-  if (cursor.x === 0 && cursor.y === 0) {
+  if (isCursorXZero && isCursorYZero) {
 
-  } else if (cursor.x === 0 && cursor.y > 0) {
+  } else if (isCursorXZero && cursor.y > ZERO) {
     setCursor({
-      y: cursor.y - 1,
+      y: cursor.y - ONE,
       x: boundaries.x
     });
   } else {
@@ -69,7 +78,7 @@ export const handleDeleteKey = ({ key }) => {
     setCharGrid(updatedCharGrid);
 
     setCursor({
-      x: getCursor().x - 1
+      x: getCursor().x - ONE
     });
 
     renderCharGrid();
@@ -88,8 +97,8 @@ export const handleEnterKey = ({ key }) => {
     setCharGrid(updatedCharGrid);
 
     setCursor({
-      x: 0,
-      y: cursor.y + 1
+      x: ZERO,
+      y: cursor.y + ONE
     });
 
     renderCharGrid();
@@ -100,17 +109,17 @@ export const handleArrowKey = ({ key }) => {
   const cursor = getCursor();
   const boundaries = getBoundaries();
 
-  if (key === 'ArrowUp' && cursor.y > 0) {
-    setCursor({ y: cursor.y - 1 });
+  if (key === 'ArrowUp' && cursor.y > ZERO) {
+    setCursor({ y: cursor.y - ONE });
   }
   if (key === 'ArrowDown' && cursor.y < boundaries.y) {
-    setCursor({ y: cursor.y + 1 });
+    setCursor({ y: cursor.y + ONE });
   }
-  if (key === 'ArrowLeft' && cursor.x > 0) {
-    setCursor({ x: cursor.x - 1 });
+  if (key === 'ArrowLeft' && cursor.x > ZERO) {
+    setCursor({ x: cursor.x - ONE });
   }
   if (key === 'ArrowRight' && cursor.x < boundaries.x) {
-    setCursor({ x: cursor.x + 1 });
+    setCursor({ x: cursor.x + ONE });
   }
 }
 
